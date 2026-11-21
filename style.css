@@ -421,3 +421,16 @@ details[open] summary::after{transform:rotate(225deg) translateY(-2px)}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
 }
+
+/* Форматы и подготовка оплаты */
+.pricing{background:var(--paper-2)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.pricing-card{min-width:0;background:var(--card);border:1px solid var(--line);padding:clamp(24px,3vw,36px);display:flex;flex-direction:column;gap:15px}
+.pricing-card p:not(.pricing-label):not(.pricing-price){color:var(--ink-2)}
+.pricing-card .link-strong{margin-top:auto;align-self:flex-start}
+.pricing-label{font-size:.75rem;font-weight:700;letter-spacing:.11em;color:var(--green)}
+.pricing-price{font-weight:700;color:var(--ink);font-size:1rem}
+.payment-explainer{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(24px,5vw,64px);padding-top:clamp(36px,5vw,56px)}
+.payment-explainer h3{margin-bottom:12px}.payment-explainer p{color:var(--ink-2)}
+.pricing-status{margin-top:32px;padding:18px 20px;border-left:3px solid var(--brass);background:var(--card);font-size:.925rem;color:var(--ink-2)}
+@media(max-width:760px){.pricing-grid,.payment-explainer{grid-template-columns:1fr}}
