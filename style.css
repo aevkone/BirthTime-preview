@@ -152,6 +152,23 @@ p{margin:0}
   text-wrap:balance;
 }
 .act-cap span{display:block;max-width:40ch;color:#c9d6cd}
+.act-end{display:grid;place-items:center;background:radial-gradient(120% 90% at 30% 20%,#24493d 0%,#14231e 70%)}
+.act-end::after{display:none}
+.act-end-inner{display:grid;gap:14px;justify-items:start;max-width:30ch;padding:clamp(26px,4vw,40px);color:#e9efe9}
+.act-end-kicker{font-size:.86rem;font-weight:500;color:var(--brass-l)}
+.act-end-title{font-family:Onest,system-ui,sans-serif;font-weight:700;font-size:clamp(1.7rem,2.6vw,2.2rem);line-height:1.08;letter-spacing:-.04em;color:#fff;text-wrap:balance}
+.act-end-text{color:#c9d6cd;line-height:1.5}
+.act-end .button{margin-top:6px}
+.reel-chips{position:absolute;top:clamp(18px,3vw,28px);left:clamp(18px,3vw,28px);z-index:1;list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.reel-chips li{display:flex;align-items:center;gap:9px;padding:8px 14px 8px 11px;border-radius:99px;background:rgba(12,26,20,.72);backdrop-filter:blur(6px);color:#fff;font-size:.88rem;font-weight:600;box-shadow:0 8px 20px -10px rgba(0,0,0,.6)}
+.reel-chips em{font-style:normal;font-weight:400;color:#bfd0c5}
+.rc-dot{width:8px;height:8px;border-radius:50%;background:#7fd1a4;box-shadow:0 0 0 3px rgba(127,209,164,.25)}
+.reel-time{position:absolute;top:clamp(18px,3vw,30px);right:clamp(18px,3vw,30px);z-index:1;display:grid;justify-items:center;gap:2px;padding:14px 20px 12px;border-radius:14px;background:rgba(12,26,20,.74);backdrop-filter:blur(6px);color:#fff;box-shadow:0 14px 30px -14px rgba(0,0,0,.7)}
+.reel-time b{font-family:Onest,system-ui,sans-serif;font-weight:700;font-size:clamp(1.9rem,3vw,2.5rem);letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.rt-label{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--brass-l)}
+.rt-ring{position:absolute;inset:-2px;border-radius:16px;border:2px solid var(--brass-l);opacity:0}
+.act::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;background:linear-gradient(105deg,transparent 35%,rgba(255,226,170,.22) 48%,rgba(255,240,210,.32) 50%,rgba(255,226,170,.22) 52%,transparent 65%);transform:translateX(-60%)}
+.act-end::before{display:none}
 .reel-bar{position:absolute;left:0;right:0;bottom:0;z-index:2;height:3px;background:rgba(255,255,255,.14)}
 .reel-bar span{display:block;height:100%;width:100%;background:var(--brass-l);transform-origin:0 50%;transform:scaleX(1)}
 
@@ -301,7 +318,9 @@ details[open] summary::after{transform:rotate(225deg) translateY(-2px)}
 }
 @media (max-width:760px){
   .wrap{width:calc(100% - 36px)}
-  .reel{min-height:0;aspect-ratio:4/4.7;margin-top:30px}
+  .reel{min-height:0;aspect-ratio:4/4.9;margin-top:30px}
+  .reel-chips li{font-size:.8rem;padding:6px 12px 6px 9px}
+  .reel-time{padding:10px 14px 9px}
   .nav{display:none}
   .header-inner{min-height:0;flex-wrap:wrap;padding-top:13px}
   .nav-mobile{
@@ -352,16 +371,43 @@ details[open] summary::after{transform:rotate(225deg) translateY(-2px)}
   .r-2{animation-delay:.07s}
   .r-3{animation-delay:.14s}
   .r-4{animation-delay:.21s}
-  .act{animation:reel-act 20s var(--ease) infinite}
-  .act-2{animation-delay:-15s}
-  .act-3{animation-delay:-10s}
-  .act-4{animation-delay:-5s}
-  .reel-bar span{animation:reel-bar 20s linear infinite}
-  .act-photo{animation:reel-kb 20s cubic-bezier(.3,.1,.3,1) infinite}
-  .act-cap{animation:reel-cap 20s var(--ease) infinite}
-  .act-2 .act-photo,.act-2 .act-cap{animation-delay:-15s}
-  .act-3 .act-photo,.act-3 .act-cap{animation-delay:-10s}
-  .act-4 .act-photo,.act-4 .act-cap{animation-delay:-5s}
+  .act{animation:reel-act 28s var(--ease) infinite}
+  .act-2{animation-delay:-24s}
+  .act-3{animation-delay:-20s}
+  .act-4{animation-delay:-16s}
+  .act-5{animation-delay:-12s}
+  .act-6{animation-delay:-8s}
+  .act-7{animation-delay:-4s}
+  .reel-bar span{animation:reel-bar 28s linear infinite}
+  .act-photo{animation:reel-kb 28s cubic-bezier(.3,.1,.3,1) infinite}
+  .act-cap,.act-end-inner{animation:reel-cap 28s var(--ease) infinite}
+  .act-2 .act-photo{animation-name:reel-kb2}
+  .act-2 .act-photo,.act-2 .act-cap{animation-delay:-24s}
+  .act-3 .act-photo,.act-3 .act-cap{animation-delay:-20s}
+  .act-4 .act-photo,.act-4 .act-cap{animation-delay:-16s}
+  .act-5 .act-photo,.act-5 .act-cap{animation-delay:-12s}
+  .act-6 .act-photo,.act-6 .act-cap{animation-delay:-8s}
+  .act-7 .act-end-inner{animation-delay:-4s}
+  /* Пауза, чтобы дочитать; кнопка в финале доступна с клавиатуры */
+  .reel:hover .act::before,.reel:hover .reel-chips li,.reel:hover .reel-time,.reel:hover .rt-ring,.reel:hover .act,.reel:hover .act-photo,.reel:hover .act-cap,.reel:hover .act-end-inner,.reel:hover .reel-bar span,
+  .reel:focus-within .act::before,.reel:focus-within .reel-chips li,.reel:focus-within .reel-time,.reel:focus-within .rt-ring,.reel:focus-within .act,.reel:focus-within .act-photo,.reel:focus-within .act-cap,.reel:focus-within .act-end-inner,.reel:focus-within .reel-bar span{animation-play-state:paused}
+  /* Моушн-слой: блик, всплывающие запросы, «приземление» минуты, пульс кнопки */
+  .act::before{animation:reel-sweep 28s cubic-bezier(.4,0,.2,1) infinite}
+  .act-2::before{animation-delay:-24s}
+  .act-3::before{animation-delay:-20s}
+  .act-4::before{animation-delay:-16s}
+  .act-5::before{animation-delay:-12s}
+  .act-6::before{animation-delay:-8s}
+  .reel-chips li{animation:reel-chip 28s var(--ease) infinite}
+  .reel-chips li:nth-child(1){animation-delay:-11.4s}
+  .reel-chips li:nth-child(2){animation-delay:-10.85s}
+  .reel-chips li:nth-child(3){animation-delay:-10.3s}
+  .rc-dot{animation:reel-dot 1.4s ease-in-out infinite}
+  .reel-time{animation:reel-stamp 28s var(--ease) -7.3s infinite}
+  .rt-ring{animation:reel-ring 28s ease-out -7s infinite}
+  .act-end .button{animation:reel-pulse 2.4s ease-in-out infinite}
+  .act-7:focus-within{opacity:1;animation:none}
+  .act-7:focus-within .act-end-inner{opacity:1;transform:none;animation:none}
 
   /* 2. Путь поиска: линия между шагами прочерчивается,
         узлы включаются по мере прокрутки секции. */
@@ -380,21 +426,59 @@ details[open] summary::after{transform:rotate(225deg) translateY(-2px)}
 }
 
 @keyframes reel-act{
-  0%{opacity:0;transform:translateY(10px);filter:blur(3px)}
-  3%{opacity:1;transform:none;filter:blur(0)}
-  22%{opacity:1;transform:none;filter:blur(0)}
-  25%{opacity:0;transform:translateY(-10px);filter:blur(3px)}
+  0%{opacity:0;filter:blur(3px)}
+  2%{opacity:1;filter:blur(0)}
+  12.6%{opacity:1;filter:blur(0)}
+  14.29%{opacity:0;filter:blur(3px)}
   100%{opacity:0}
 }
 @keyframes reel-kb{
   0%{transform:scale(1.04)}
-  26%{transform:scale(1.15)}
-  100%{transform:scale(1.15)}
+  14.29%{transform:scale(1.12)}
+  100%{transform:scale(1.12)}
+}
+@keyframes reel-kb2{
+  0%{transform:scale(1.12)}
+  14.29%{transform:scale(1.2)}
+  100%{transform:scale(1.2)}
 }
 @keyframes reel-cap{
-  0%,2%{opacity:0;transform:translateY(14px)}
-  7%,21%{opacity:1;transform:none}
-  24%,100%{opacity:0;transform:translateY(-6px)}
+  0%,1.5%{opacity:0;transform:translateY(14px)}
+  4%,12.4%{opacity:1;transform:none}
+  14%,100%{opacity:0;transform:translateY(-6px)}
+}
+@keyframes reel-sweep{
+  0%{opacity:0;transform:translateX(-60%)}
+  1%{opacity:1}
+  7%{opacity:1;transform:translateX(60%)}
+  8%,100%{opacity:0;transform:translateX(60%)}
+}
+@keyframes reel-chip{
+  0%{opacity:0;transform:translateX(-18px) scale(.92)}
+  2.2%{opacity:1;transform:none}
+  11%{opacity:1;transform:none}
+  12.6%,100%{opacity:0;transform:translateX(-8px)}
+}
+@keyframes reel-dot{
+  0%,100%{box-shadow:0 0 0 3px rgba(127,209,164,.25)}
+  50%{box-shadow:0 0 0 7px rgba(127,209,164,0)}
+}
+@keyframes reel-stamp{
+  0%{opacity:0;transform:scale(1.35) rotate(-4deg);filter:blur(4px)}
+  2.6%{opacity:1;transform:scale(.97) rotate(0);filter:blur(0)}
+  3.4%{transform:scale(1)}
+  11.6%{opacity:1;transform:scale(1)}
+  13%,100%{opacity:0;transform:scale(1)}
+}
+@keyframes reel-ring{
+  0%{opacity:0;transform:scale(1)}
+  .5%{opacity:.9;transform:scale(1)}
+  4%{opacity:0;transform:scale(1.45)}
+  100%{opacity:0;transform:scale(1.45)}
+}
+@keyframes reel-pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.45),0 10px 24px -14px rgba(0,0,0,.5)}
+  60%{box-shadow:0 0 0 12px rgba(255,255,255,0),0 10px 24px -14px rgba(0,0,0,.5)}
 }
 @keyframes reel-bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes arrive{
