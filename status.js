@@ -13,7 +13,7 @@
   ];
 
   var STATUS = {
-    prepared:   { text: 'Подготовлен', tone: 'idle' },
+    prepared:   { text: 'Подготовлен — уйдёт после оплаты', tone: 'idle' },
     sent:       { text: 'Отправлен', tone: 'sent' },
     registered: { text: 'Зарегистрирован', tone: 'sent' },
     in_work:    { text: 'В работе', tone: 'work' },
@@ -21,7 +21,8 @@
     no_time:    { text: 'Ответ получен: времени в документе нет', tone: 'warn' },
     redirected: { text: 'Переадресовали к другому хранителю', tone: 'warn' },
     refused:    { text: 'Отказ — разбираем причину', tone: 'bad' },
-    overdue:    { text: 'Срок прошёл — выясняем причину', tone: 'bad' }
+    overdue:    { text: 'Срок прошёл — выясняем причину', tone: 'bad' },
+    self_send:  { text: 'Письмо готово — отправляет заявитель', tone: 'idle' }
   };
 
   function el(tag, cls, text) {
@@ -165,11 +166,29 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     var root = document.getElementById('st-root');
-    var code = new URLSearchParams(location.search).get('case') || 'demo';
-    if (!/^[a-z0-9-]{3,40}$/i.test(code)) { fail(root, 'Проверь код поиска в ссылке.'); return; }
-    fetch('cases/' + code.toLowerCase() + '.json', { cache: 'no-store' })
+    var cfg = window.BIRTHTIME_CONFIG || {};
+    var params = new URLSearchParams(location.search);
+    var code = params.get('case') || 'demo';
+    var token = params.get('t') || '';
+    function show(data) { render(root, data); document.title = 'Поиск № ' + data.case + ' — BirthTime'; }
+
+    if (code === 'local') {
+      var saved = null;
+      try { saved = JSON.parse(sessionStorage.getItem('birthtime-local-case') || 'null'); } catch (e) { saved = null; }
+      if (saved) { show(saved); return; }
+      fail(root, 'Демо-трекер хранится только в этой вкладке браузера. Оформи заявку ещё раз или посмотри пример.');
+      return;
+    }
+    var live = cfg.mode === 'live' && cfg.apiBase && /^BT-[0-9A-Z]{6}$/.test(code);
+    var url;
+    if (live) {
+      url = cfg.apiBase.replace(/\/$/, '') + '/cases/' + code + '?t=' + encodeURIComponent(token);
+    } else if (/^[a-z0-9-]{3,40}$/i.test(code)) {
+      url = 'cases/' + code.toLowerCase() + '.json';
+    } else { fail(root, 'Проверь код поиска в ссылке.'); return; }
+    fetch(url, { cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-      .then(function (data) { render(root, data); document.title = 'Поиск № ' + data.case + ' — BirthTime'; })
-      .catch(function () { fail(root, 'По этой ссылке нет поиска. Проверь код или напиши нам.'); });
+      .then(show)
+      .catch(function () { fail(root, 'По этой ссылке нет поиска. Проверь ссылку из письма или напиши нам.'); });
   });
 })();

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Оформить поиск — BirthTime</title>
+<meta name="description" content="Оформи поиск точного времени рождения: укажи, что помнишь, выбери, кто отправляет запросы, подпиши и оплати. Дальше мы ищем, а ты следишь за статусом.">
+<meta name="theme-color" content="#15211d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&amp;family=Onest:wght@500;600;700&amp;display=swap">
+<link rel="stylesheet" href="style.css?v=20261122g">
+</head>
+<body class="order-page">
+
+<svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0"><defs>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><path d="M12 6.8V12l3.6 2.3"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M19.5 12h-15M10.5 6l-6 6 6 6"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.6l5 5L19.5 7"/></symbol>
+</defs></svg>
+
+<header class="header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true"><svg class="icon" width="18" height="18"><use href="#i-clock"/></svg></span>
+      BirthTime
+    </a>
+    <a class="link-strong" href="index.html#pricing">Тарифы</a>
+  </div>
+</header>
+
+<main id="main" class="wrap ord">
+  <div class="ord-demo" id="ord-demo" hidden>
+    <b>Демо-режим.</b> Можно пройти весь путь, но данные никуда не отправляются: приём заявок откроется после запуска.
+  </div>
+
+  <h1>Оформить поиск</h1>
+  <p class="ord-lead">Пять коротких шагов. Обязательно только то, без чего поиск невозможен. Остальное — что помнишь.</p>
+
+  <ol class="ord-steps" id="ord-steps" aria-label="Шаги оформления">
+    <li class="is-now"><span>1</span>О тебе</li>
+    <li><span>2</span>Что помнишь</li>
+    <li><span>3</span>Как ищем</li>
+    <li><span>4</span>Документы</li>
+    <li><span>5</span>Подпись и оплата</li>
+  </ol>
+
+  <form id="ord-form" novalidate>
+    <!-- Шаг 1 -->
+    <section class="ord-step" data-step="1">
+      <h2>О тебе</h2>
+      <div class="ord-grid">
+        <div class="field field-wide"><label for="f-fio">Фамилия, имя, отчество</label><input id="f-fio" name="fio" autocomplete="name" required></div>
+        <div class="field field-wide ord-check"><label><input type="checkbox" id="f-fio-changed"> Фамилия при рождении была другой</label></div>
+        <div class="field field-wide" id="w-fio-birth" hidden><label for="f-fio-birth">ФИО при рождении</label><input id="f-fio-birth" name="fio_birth"></div>
+        <div class="field"><label for="f-date">Дата рождения</label><input id="f-date" name="birth_date" type="date" min="1930-01-01" required></div>
+        <div class="field"><label for="f-city">Город рождения</label>
+          <select id="f-city" name="birth_city_choice"><option>Москва</option><option>Ижевск</option><option value="other">Другой город</option></select></div>
+        <div class="field field-wide" id="w-city-other" hidden><label for="f-city-other">Название города</label><input id="f-city-other" name="birth_city_other"></div>
+        <div class="field"><label for="f-email">Электронная почта</label><input id="f-email" name="email" type="email" autocomplete="email" required><p class="hint">Сюда придут код для подписи, статусы и результат.</p></div>
+        <div class="field"><label for="f-phone">Телефон</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required placeholder="+7"></div>
+      </div>
+    </section>
+
+    <!-- Шаг 2 -->
+    <section class="ord-step" data-step="2" hidden>
+      <h2>Что помнишь</h2>
+      <p class="ord-note">Все поля необязательны. Не помнишь — пропусти, мы найдём по ФИО и дате. Но каждая деталь ускоряет поиск.</p>
+      <div class="ord-grid">
+        <div class="field field-wide"><label for="f-mother">ФИО мамы на момент родов</label><input id="f-mother" name="mother_fio"><p class="hint">Записи в роддоме ведутся по фамилии мамы — это самая полезная подсказка.</p></div>
+        <div class="field field-wide"><label for="f-address">Где жила семья в первые годы</label><input id="f-address" name="family_address" placeholder="Хотя бы район или улица"><p class="hint">По адресу находим детскую поликлинику, а в её карте часто есть выписка из роддома.</p></div>
+        <div class="field"><label for="f-hospital">Роддом</label><input id="f-hospital" name="hospital" placeholder="Например, роддом № 8"><p class="hint">Не помнишь — это нормально, так у большинства.</p></div>
+        <div class="field"><label for="f-poly">Детская поликлиника</label><input id="f-poly" name="polyclinic" placeholder="Номер, если помнишь"></div>
+        <div class="field field-wide"><label for="f-registry">Где регистрировали рождение</label><input id="f-registry" name="registry_office" placeholder="Есть в свидетельстве о рождении: отдел ЗАГС"></div>
+        <fieldset class="field field-wide ord-docs"><legend>Что из этого есть дома?</legend>
+          <label><input type="checkbox" name="home_docs" value="Обменная карта или выписка из роддома"> Обменная карта или выписка из роддома</label>
+          <label><input type="checkbox" name="home_docs" value="Бирка из роддома"> Бирка из роддома</label>
+          <label><input type="checkbox" name="home_docs" value="Записи родителей"> Записи родителей</label>
+          <p class="ord-hint-home" id="ord-hint-home" hidden>Загляни в них прямо сейчас: время рождения часто записано там. Если нашлось — напиши нам, это поможет проверить запись по документам.</p>
+        </fieldset>
+      </div>
+      <div class="ord-plan" id="ord-plan" aria-live="polite"></div>
+    </section>
+
+    <!-- Шаг 3 -->
+    <section class="ord-step" data-step="3" hidden>
+      <h2>Как ищем</h2>
+      <fieldset class="ord-choice">
+        <legend>Кто отправляет запросы</legend>
+        <label class="ord-card is-picked"><input type="radio" name="mode" value="proxy" checked>
+          <b>Отправляем мы <em>удобнее</em></b>
+          <span>Ты подписываешь электронную доверенность кодом из письма. Мы отправляем запросы во все места сразу, получаем ответы и сообщаем тебе.</span></label>
+        <label class="ord-card"><input type="radio" name="mode" value="self">
+          <b>Отправлю сам</b>
+          <span>Мы готовим запросы и адреса, ты отправляешь их от своего имени. Ответы приходят тебе — перешли их нам для разбора.</span></label>
+      </fieldset>
+      <div class="ord-grid" id="w-proxy">
+        <p class="ord-note field-wide">Для доверенности нужны паспортные данные и адрес регистрации — без них она недействительна. Они используются только в доверенности.</p>
+        <div class="field"><label for="f-ps">Серия паспорта</label><input id="f-ps" name="passport_series" inputmode="numeric" maxlength="5"></div>
+        <div class="field"><label for="f-pn">Номер паспорта</label><input id="f-pn" name="passport_number" inputmode="numeric" maxlength="7"></div>
+        <div class="field field-wide"><label for="f-pi">Кем выдан</label><input id="f-pi" name="passport_issued_by"></div>
+        <div class="field"><label for="f-pd">Дата выдачи</label><input id="f-pd" name="passport_issued_date" type="date"></div>
+        <div class="field field-wide"><label for="f-reg">Адрес регистрации</label><input id="f-reg" name="reg_address"></div>
+        <p class="ord-warn field-wide">Учреждение вправе потребовать нотариальную доверенность или личное обращение. Тогда мы пришлём тебе готовый запрос для самостоятельной отправки — без доплаты.</p>
+      </div>
+      <fieldset class="ord-choice ord-tariffs">
+        <legend>Тариф</legend>
+        <label class="ord-card is-picked"><input type="radio" name="tariff" value="full" checked><b>Под ключ <em>выгоднее</em></b><span>Маршрут и сопровождение до ответа</span><strong>11 900 ₽</strong></label>
+        <label class="ord-card"><input type="radio" name="tariff" value="route"><b>Маршрут за 48 часов</b><span>Хранители и готовые запросы</span><strong>4 900 ₽</strong></label>
+        <label class="ord-card"><input type="radio" name="tariff" value="support"><b>Сопровождение</b><span>Если маршрут уже есть</span><strong>7 900 ₽</strong></label>
+      </fieldset>
+    </section>
+
+    <!-- Шаг 4 -->
+    <section class="ord-step" data-step="4" hidden>
+      <h2>Документы</h2>
+      <p class="ord-note">Вот что мы сформировали по твоим данным. Проверь — так это уйдёт в учреждения.</p>
+      <div class="ord-docs-list" id="ord-docs"></div>
+      <fieldset class="ord-consents">
+        <legend>Согласия</legend>
+        <label><input type="checkbox" name="c_offer"> Принимаю условия <a href="legal/offer.html" target="_blank" rel="noopener">публичной оферты</a>, включая соглашение о простой электронной подписи</label>
+        <label><input type="checkbox" name="c_pd"> Даю <a href="legal/consent.html" target="_blank" rel="noopener">согласие на обработку персональных данных</a> и знакомлюсь с <a href="legal/privacy.html" target="_blank" rel="noopener">политикой</a></label>
+        <label><input type="checkbox" name="c_special"> Даю согласие на обработку сведений о здоровье в объёме документов о моём рождении</label>
+        <label id="w-c-proxy"><input type="checkbox" name="c_proxy"> Поручаю ИП Чирковой В. В. отправлять запросы и получать ответы от моего имени по <a href="legal/power-of-attorney.html" target="_blank" rel="noopener">доверенности</a></label>
+      </fieldset>
+    </section>
+
+    <!-- Шаг 5 -->
+    <section class="ord-step" data-step="5" hidden>
+      <h2>Подпись и оплата</h2>
+      <div class="ord-summary" id="ord-summary"></div>
+      <div class="ord-sign" id="ord-sign" hidden>
+        <p>Мы отправили код на <b id="ord-sign-email"></b>. Введи его — это твоя подпись под доверенностью и согласиями.</p>
+        <div class="field"><label for="f-code">Код из письма</label><input id="f-code" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div>
+        <button class="link-strong ord-resend" type="button" id="ord-resend">Прислать код ещё раз</button>
+      </div>
+      <div class="ord-final" id="ord-final" hidden></div>
+    </section>
+
+    <p class="field-error ord-error" id="ord-error" role="alert" hidden></p>
+    <div class="ord-nav">
+      <button class="button button-lg ord-back" type="button" id="ord-back" hidden><svg class="icon" aria-hidden="true" width="18" height="18"><use href="#i-back"/></svg>Назад</button>
+      <button class="button button-lg" type="submit" id="ord-next">Дальше<svg class="icon" aria-hidden="true" width="18" height="18"><use href="#i-arrow"/></svg></button>
+    </div>
+  </form>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <p class="note">BirthTime · ИП Чиркова В. В., ИНН 183112764042 · <a href="legal/offer.html">Оферта</a> · <a href="legal/privacy.html">Политика</a></p>
+  </div>
+</footer>
+
+<script src="config.js?v=20261122g"></script>
+<script src="order.js?v=20261122g" defer></script>
+</body>
+</html>

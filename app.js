@@ -87,8 +87,8 @@
     box.appendChild(el('p', 'cr-note', note));
     box.appendChild(el('p', 'cr-fine', 'Это предварительная оценка по общим правилам. Результат зависит от сохранности конкретных документов и не гарантируется.'));
 
-    var cta = el('a', 'button button-lg', 'Посмотреть тарифы');
-    cta.href = '#pricing';
+    var cta = el('a', 'button button-lg', 'Оформить поиск');
+    cta.href = 'order.html';
     box.appendChild(cta);
 
     box.hidden = false;
