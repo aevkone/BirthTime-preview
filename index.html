@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&amp;family=Onest:wght@500;600;700&amp;display=swap">
-<link rel="stylesheet" href="style.css?v=20261122">
+<link rel="stylesheet" href="style.css?v=20261122c">
 </head>
 <body>
 
@@ -41,18 +41,22 @@
       BirthTime
     </a>
     <nav class="nav" aria-label="Основная навигация">
-      <a href="#stakes">Зачем это</a>
-      <a href="#start">С чего начать</a>
+      <a href="#check">Шансы</a>
       <a href="#how">Как ищем</a>
-      <a href="#pricing">Стоимость</a><a href="#questions">Вопросы</a><a href="#contacts">Контакты</a>
+      <a href="#status">Статус</a>
+      <a href="#pricing">Стоимость</a>
+      <a href="#questions">Вопросы</a>
+      <a href="#contacts">Контакты</a>
     </nav>
     <nav class="nav-mobile" aria-label="Разделы страницы">
-      <a href="#stakes">Зачем это</a>
-      <a href="#start">С чего начать</a>
+      <a href="#check">Шансы</a>
       <a href="#how">Как ищем</a>
-      <a href="#pricing">Стоимость</a><a href="#questions">Вопросы</a><a href="#contacts">Контакты</a>
+      <a href="#status">Статус</a>
+      <a href="#pricing">Стоимость</a>
+      <a href="#questions">Вопросы</a>
+      <a href="#contacts">Контакты</a>
     </nav>
-    <a class="button button-sm" href="#start">Начать<svg class="icon" aria-hidden="true" width="16" height="16"><use href="#i-arrow"/></svg></a>
+    <a class="button button-sm" href="#check">Мои шансы<svg class="icon" aria-hidden="true" width="16" height="16"><use href="#i-arrow"/></svg></a>
   </div>
 </header>
 
@@ -64,7 +68,7 @@
       <h1 class="r-1">Узнай точное время своего рождения — <em>до минуты</em></h1>
       <p class="hero-lead r-2">Хочешь подробно разобрать свою натальную карту или получить максимально точный прогноз? Для этого нужно время рождения вплоть до минуты. Мы помогаем найти его в документах, а не гадать по семейному «кажется, под утро».</p>
       <div class="hero-actions r-3">
-        <a class="button button-lg" href="#start">Узнать своё время рождения<svg class="icon" aria-hidden="true" width="18" height="18"><use href="#i-arrow"/></svg></a>
+        <a class="button button-lg" href="#check">Проверить свои шансы<svg class="icon" aria-hidden="true" width="18" height="18"><use href="#i-arrow"/></svg></a>
         <a class="link-strong" href="#how">Как мы ищем</a>
       </div>
       <ul class="hero-marks r-4">
@@ -102,6 +106,38 @@
   </div>
 </section>
 
+<section class="section check" id="check">
+  <div class="wrap check-grid">
+    <div class="check-copy">
+      <h2>Проверь свои шансы<br>за 10 секунд</h2>
+      <p>Выбери город и год рождения, и сразу увидишь, где может храниться запись о тебе и куда мы отправим запросы. Это бесплатно. Данные никуда не уходят: всё считается прямо в твоём браузере.</p>
+      <ul class="check-points">
+        <li><svg class="icon" aria-hidden="true" width="17" height="17"><use href="#i-check"/></svg>Видишь шансы до оплаты</li>
+        <li><svg class="icon" aria-hidden="true" width="17" height="17"><use href="#i-check"/></svg>Знаешь, куда пойдут запросы</li>
+        <li><svg class="icon" aria-hidden="true" width="17" height="17"><use href="#i-check"/></svg>Понимаешь сроки заранее</li>
+      </ul>
+    </div>
+    <form class="check-form" id="check-form" novalidate>
+      <div class="field">
+        <label for="check-city">Город рождения</label>
+        <select id="check-city" name="city">
+          <option value="Москва">Москва</option>
+          <option value="Ижевск">Ижевск</option>
+          <option value="Другой">Другой город</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="check-year">Год рождения</label>
+        <input id="check-year" name="year" type="number" inputmode="numeric" min="1930" max="2026" placeholder="Например, 1988" autocomplete="off">
+        <p class="field-error" id="check-error" hidden>Укажи год от 1930 до 2026.</p>
+      </div>
+      <button class="button button-lg" type="submit">Показать мои шансы<svg class="icon" aria-hidden="true" width="18" height="18"><use href="#i-arrow"/></svg></button>
+      <noscript><p class="note">Чтобы посчитать шансы, включи JavaScript. А пока посмотри <a href="#start">первые шаги</a>.</p></noscript>
+      <div class="check-result" id="check-result" aria-live="polite" hidden></div>
+    </form>
+  </div>
+</section>
+
 <section class="section wrap stakes" id="stakes">
   <div class="section-head">
     <h2>Почему важна<br>каждая минута</h2>
@@ -133,7 +169,7 @@
     <p>Если хочешь построить свою карту или пойти к астрологу, это для тебя. А если ты сам астролог или консультант, мы поможем уточнить данные твоих клиентов.</p>
   </div>
 
-  <div class="section-cta"><a class="button button-lg" href="#start">Узнать своё время рождения<svg class="icon" aria-hidden="true" width="18" height="18"><use href="#i-arrow"/></svg></a></div>
+  <div class="section-cta"><a class="button button-lg" href="#check">Проверить свои шансы<svg class="icon" aria-hidden="true" width="18" height="18"><use href="#i-arrow"/></svg></a></div>
 </section>
 
 <section class="section start" id="start">
@@ -157,7 +193,13 @@
 
       <aside class="start-aside">
         <h3>Где может быть запись о тебе</h3>
-        <p>Центр федеральных архивов советует искать время рождения в документах роддома или детской поликлиники.</p>
+        <ul class="source-list">
+          <li><b>Семейные документы.</b> Обменная карта, выписка из роддома, бирка — проверь в первую очередь.</li>
+          <li><b>Детская поликлиника.</b> В детской карте часто есть выписка из роддома. В Москве такие карты собраны в Мосархиве.</li>
+          <li><b>ЗАГС.</b> Если ты родился с 1984 года: в медицинском свидетельстве о рождении была строка «час», и оно уходило в ЗАГС.</li>
+          <li><b>Роддом или его правопреемник.</b> Документы о родах хранятся 25 лет, иногда дольше.</li>
+        </ul>
+        <p>Центр федеральных архивов тоже советует искать время в документах роддома и детской поликлиники.</p>
         <a class="link-strong" href="https://sic.rgantd.ru/kuda-obrashatsya/poisk-vremeni-rozhdeniya/" target="_blank" rel="noopener noreferrer">Посмотреть источник<svg class="icon" aria-hidden="true" width="16" height="16"><use href="#i-arrow"/></svg><span class="sr-only">(откроется в новой вкладке)</span></a>
         <p class="note">Сохранилась ли запись и можно ли её получить, зависит от твоей ситуации.</p>
       </aside>
@@ -210,40 +252,78 @@
 <section class="section how" id="how">
   <div class="wrap">
     <div class="section-head">
-      <h2>Как мы ищем<br>твоё время рождения</h2>
-      <p>Мы ведём тебя от вопроса до запроса, который действительно стоит отправить. Три понятных шага.</p>
+      <h2>Два этапа: быстрый<br>результат и честный срок</h2>
+      <p>Первую часть работы мы делаем сами и быстро. Вторая зависит от учреждений, поэтому мы отправляем запросы сразу во все места и следим за каждым сроком.</p>
     </div>
 
     <ol class="steps">
       <span class="steps-path" aria-hidden="true"></span>
       <li class="step">
-        <span class="step-node"><svg class="icon" aria-hidden="true" width="20" height="20"><use href="#i-search"/></svg></span>
-        <h3>Разбираем, что ты знаешь</h3>
-        <p>Что известно о месте рождения и какие документы помогут сузить поиск.</p>
+        <span class="step-node"><svg class="icon" aria-hidden="true" width="20" height="20"><use href="#i-route"/></svg></span>
+        <h3>Маршрут за 48 часов</h3>
+        <p>Разбираем, что ты знаешь, находим всех возможных хранителей записи и готовим запросы в каждое место.</p>
       </li>
       <li class="step">
         <span class="step-node"><svg class="icon" aria-hidden="true" width="20" height="20"><use href="#i-source"/></svg></span>
-        <h3>Ищем, где лежит запись</h3>
-        <p>Изучаем историю роддома и кто хранит его документы сейчас. Факты отделяем от догадок.</p>
+        <h3>Запросы уходят одновременно</h3>
+        <p>Мосархив, ЗАГС, роддом — сразу, а не по очереди, и где можно — электронно. Ждёшь самого быстрого ответа, а не самого медленного.</p>
       </li>
       <li class="step">
-        <span class="step-node"><svg class="icon" aria-hidden="true" width="20" height="20"><use href="#i-route"/></svg></span>
-        <h3>Говорим, что делать дальше</h3>
-        <p>Готовим маршрут: куда обращаться и как, с учётом всех ограничений.</p>
+        <span class="step-node"><svg class="icon" aria-hidden="true" width="20" height="20"><use href="#i-clock"/></svg></span>
+        <h3>Следим за каждым сроком</h3>
+        <p>По закону учреждение отвечает до 30 дней. Ты видишь статус каждого запроса, а если срок нарушен, мы готовим жалобу.</p>
       </li>
     </ol>
 
     <div class="deliverable">
-      <h3>Что ты получишь</h3>
+      <h3>Что ты получишь через 48 часов</h3>
       <ul class="deliverable-list">
-        <li>Разбор твоих данных: что известно, чего не хватает и что это меняет.</li>
-        <li>Маршрут поиска: какие места проверяем и в каком порядке.</li>
-        <li>Готовый черновик обращения под твою ситуацию.</li>
-        <li>Понятный следующий шаг, даже если ответ будет отрицательным.</li>
+        <li>Оценку шансов и разбор твоих данных: что известно и чего не хватает.</li>
+        <li>Список хранителей: где может лежать запись о тебе и что уже проверено.</li>
+        <li>Готовые запросы во все места: остаётся подписать и отправить.</li>
+        <li>Личный трекер, где видно движение каждого запроса.</li>
       </ul>
-      <p class="note">Сервис готовится к запуску. Сроки и цену мы назовём заранее, до того как ты что-то оплатишь.</p>
+      <p class="note">Маршрут — наша работа, и его срок мы обещаем. Скорость ответа учреждений обещать не можем, но следим, чтобы они уложились в срок по закону.</p>
     </div>
-    <div class="section-cta"><a class="button button-lg" href="#start">Узнать своё время рождения<svg class="icon" aria-hidden="true" width="18" height="18"><use href="#i-arrow"/></svg></a></div>
+    <div class="section-cta"><a class="button button-lg" href="#check">Проверить свои шансы<svg class="icon" aria-hidden="true" width="18" height="18"><use href="#i-arrow"/></svg></a></div>
+  </div>
+</section>
+
+<section class="section tracker-sec" id="status">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Ты всегда видишь,<br>где твой запрос</h2>
+      <p>Как отслеживание посылки: куда ушёл каждый запрос, когда его зарегистрировали и сколько дней осталось до ответа по закону. Мы пишем тебе на каждом шаге и раз в неделю, даже если новостей нет.</p>
+    </div>
+
+    <div class="tracker-preview" aria-label="Пример трекера запросов">
+      <div class="tp-head">
+        <span class="tp-tag">Пример</span>
+        <span class="tp-case">Поиск № BT-0001 · Москва, 1988</span>
+        <span class="tp-stage">Ждём ответы · 2 из 3 запросов в работе</span>
+      </div>
+      <ul class="tp-list">
+        <li class="tp-row is-done">
+          <span class="tp-dot" aria-hidden="true"></span>
+          <span class="tp-holder"><b>ГБУ «Мосархив»</b><span>Детская карта · электронно</span></span>
+          <span class="tp-status">Ответ получен: время найдено</span>
+          <span class="tp-days">день 12</span>
+        </li>
+        <li class="tp-row is-work">
+          <span class="tp-dot" aria-hidden="true"></span>
+          <span class="tp-holder"><b>ЗАГС</b><span>Медицинское свидетельство · почта</span></span>
+          <span class="tp-status">В работе · вх. № 1847</span>
+          <span class="tp-days">день 18 из 30</span>
+        </li>
+        <li class="tp-row is-sent">
+          <span class="tp-dot" aria-hidden="true"></span>
+          <span class="tp-holder"><b>Правопреемник роддома</b><span>Журнал родов · электронно</span></span>
+          <span class="tp-status">Зарегистрирован</span>
+          <span class="tp-days">день 6 из 30</span>
+        </li>
+      </ul>
+    </div>
+    <p class="tracker-more"><a class="link-strong" href="status.html?case=demo">Открыть пример трекера целиком<svg class="icon" aria-hidden="true" width="16" height="16"><use href="#i-arrow"/></svg></a></p>
   </div>
 </section>
 
@@ -251,15 +331,17 @@
   <div class="wrap">
     <div class="section-head">
       <h2>Сколько стоит<br>и как платить</h2>
-      <p>Начать ты можешь сам и бесплатно. Если понадобится помощь, мы предложим несколько вариантов с понятной ценой до оплаты.</p>
+      <p>Шансы проверяешь бесплатно. Дальше выбираешь то, что нужно: маршрут, сопровождение или всё вместе.</p>
     </div>
-    <div class="pricing-grid">
-      <article class="pricing-card"><p class="pricing-label">Уже доступно</p><h3>Первые шаги</h3><p class="pricing-price">Бесплатно</p><p>Запиши, что знаешь, и посмотри подсказки для своей ситуации. Ничего отправлять не нужно.</p><a class="link-strong" href="#start">Сделать первый шаг</a></article>
-      <article class="pricing-card"><p class="pricing-label">Скоро</p><h3>Твой маршрут поиска</h3><p class="pricing-price">Цена уточняется</p><p>Разберём твои данные, найдём возможные источники и составим маршрут. Обращения ты отправишь сам.</p></article>
-      <article class="pricing-card"><p class="pricing-label">Скоро</p><h3>Поиск вместе с нами</h3><p class="pricing-price">Цена уточняется</p><p>Поможем с поиском, подготовим обращения и разберём ответы в рамках того, о чём договоримся заранее.</p></article>
+    <div class="pricing-grid pricing-grid-4">
+      <article class="pricing-card"><p class="pricing-label">Бесплатно</p><h3>Проверка шансов</h3><p class="pricing-price">0 ₽</p><p>Укажи город и год рождения, и увидишь, где может лежать запись о тебе и куда пойдут запросы.</p><a class="link-strong" href="#check">Проверить шансы</a></article>
+      <article class="pricing-card"><p class="pricing-label">Этап 1</p><h3>Маршрут за 48 часов</h3><p class="pricing-price">4 900 ₽</p><p>Разбор твоих данных, все хранители записи и готовые запросы в каждое место. Отправляешь сам или берёшь сопровождение.</p></article>
+      <article class="pricing-card is-featured"><p class="pricing-label">Выгоднее всего</p><h3>Под ключ</h3><p class="pricing-price">11 900 ₽ <s>12 800 ₽</s></p><p>Маршрут и сопровождение: отправляем запросы одновременно, ведём трекер, следим за сроками, разбираем ответы и оцениваем качество найденного времени.</p></article>
+      <article class="pricing-card"><p class="pricing-label">Этап 2</p><h3>Сопровождение до ответа</h3><p class="pricing-price">7 900 ₽</p><p>Если маршрут у тебя уже есть. Отправка, трекер, контроль сроков и жалобы, если учреждение молчит дольше 30 дней.</p></article>
     </div>
-    <div class="payment-explainer"><div><h3>Как ты будешь платить</h3><p>Сначала мы оцениваем твою ситуацию и называем цену и что входит в работу. Платишь, только когда согласен. Если понадобится ещё этап, его цену обсудим отдельно.</p></div><div><h3>Если запись не найдётся</h3><p>Ты платишь за работу, о которой мы договорились. Найти документ мы не гарантируем. Условия отмены и возврата опубликуем до запуска оплаты.</p></div></div>
-    <p class="pricing-status">Заявки и оплату пока не принимаем. Цены, сроки и условия ещё уточняются.</p>
+    <div class="payment-explainer"><div><h3>Платишь в такт результату</h3><p>Маршрут оплачиваешь сразу и получаешь его через 48 часов. Сопровождение — фиксированная цена. Если не удалось установить, у кого хранится запись, вернём деньги за сопровождение.</p></div><div><h3>Если запись не найдётся</h3><p>Ты платишь за сделанную работу. Найти документ мы не гарантируем: он мог не сохраниться. Пошлины учреждений, если они есть, оплачиваются по факту, без наценки. Запросы в Мосархив бесплатные.</p></div></div>
+    <p class="pricing-note">Сложные случаи (роды вне роддома, другая страна, несколько отказов подряд) стоят от 25 000 ₽ после оценки.</p>
+    <p class="pricing-status">Заявки и оплату пока не принимаем. Это цены пилота: они начнут действовать, когда откроется приём.</p>
   </div>
 </section>
 
@@ -297,6 +379,14 @@
       <div class="faq-body"><p>Первый шаг работает в любом городе: записать дату, место и всё, что знаешь о роддоме, полезно в любом случае — эти сведения понадобятся при любом поиске. Сопровождение мы пока начинаем в двух городах, потому что там уже проверили источники.</p></div>
     </details>
     <details>
+      <summary>Сколько ждать результата?</summary>
+      <div class="faq-body"><p>Маршрут ты получишь через 48 часов: это наша часть работы. Ответы учреждений по закону приходят в течение 30 дней. Мы отправляем запросы сразу во все места, поэтому первый ответ обычно приходит раньше. Статус каждого запроса видно в твоём трекере.</p></div>
+    </details>
+    <details>
+      <summary>Куда вы отправляете запросы?</summary>
+      <div class="faq-body"><p>Во все места, где может храниться запись о тебе: в детскую поликлинику или её архив (в Москве — Мосархив), в ЗАГС, в роддом или к его правопреемнику. Какие из них подходят именно тебе, зависит от города и года рождения. Это видно в проверке шансов.</p></div>
+    </details>
+    <details>
       <summary>Вы точно найдёте моё время рождения?</summary>
       <div class="faq-body"><p>Гарантировать не можем. Всё зависит от того, сохранились ли документы, получится ли найти, кто их хранит, и есть ли законный способ их получить.</p></div>
     </details>
@@ -306,7 +396,7 @@
     </details>
     <details>
       <summary>Сколько это стоит?</summary>
-      <div class="faq-body"><p>Первые шаги на сайте бесплатны. Цену маршрута поиска и сопровождения мы ещё уточняем и назовём заранее, до оплаты.</p></div>
+      <div class="faq-body"><p>Проверка шансов бесплатна. Маршрут за 48 часов стоит 4 900 ₽, сопровождение до ответа 7 900 ₽, всё вместе 11 900 ₽. Сложные случаи от 25 000 ₽ после оценки. Пошлины учреждений, если есть, оплачиваются по факту.</p></div>
     </details>
   </div>
 </section>
@@ -325,7 +415,7 @@
       <h2>Начни с того,<br>что уже знаешь</h2>
       <p>Запиши дату, город и всё, что помнишь о роддоме. Когда мы откроем приём заявок, у тебя уже будет готова точка старта.</p>
     </div>
-    <a class="button button-lg button-light" href="#start">Узнать своё время рождения<svg class="icon" aria-hidden="true" width="18" height="18"><use href="#i-arrow"/></svg></a>
+    <a class="button button-lg button-light" href="#check">Проверить свои шансы<svg class="icon" aria-hidden="true" width="18" height="18"><use href="#i-arrow"/></svg></a>
   </div>
 </section>
 
@@ -371,8 +461,11 @@
 {"@type":"Question","name":"А если я родился не в Москве и не в Ижевске?","acceptedAnswer":{"@type":"Answer","text":"Первый шаг работает в любом городе: записать дату, место и всё, что известно о роддоме, полезно при любом поиске. Сопровождение пока начинаем в двух городах, где уже проверены источники."}},
 {"@type":"Question","name":"Вы точно найдёте моё время рождения?","acceptedAnswer":{"@type":"Answer","text":"Гарантировать нельзя. Всё зависит от сохранности документов, возможности найти их хранителя и законного способа их получить."}},
 {"@type":"Question","name":"Можно уже отправить заявку или документы?","acceptedAnswer":{"@type":"Answer","text":"Пока нет: приём заявок ещё не открыт. Не отправляй медицинские документы или копию паспорта."}},
-{"@type":"Question","name":"Сколько это стоит?","acceptedAnswer":{"@type":"Answer","text":"Первые шаги на сайте бесплатны. Цену маршрута поиска и сопровождения назовём заранее, до оплаты."}}]}
+{"@type":"Question","name":"Сколько ждать результата?","acceptedAnswer":{"@type":"Answer","text":"Маршрут — через 48 часов. Ответы учреждений по закону приходят в течение 30 дней; запросы отправляются одновременно во все места, статус каждого виден в трекере."}},
+{"@type":"Question","name":"Куда вы отправляете запросы?","acceptedAnswer":{"@type":"Answer","text":"В детскую поликлинику или её архив (в Москве — Мосархив), в ЗАГС, в роддом или к его правопреемнику — в зависимости от города и года рождения."}},
+{"@type":"Question","name":"Сколько это стоит?","acceptedAnswer":{"@type":"Answer","text":"Проверка шансов — бесплатно. Маршрут за 48 часов — 4 900 ₽, сопровождение до ответа — 7 900 ₽, всё вместе — 11 900 ₽. Сложные случаи — от 25 000 ₽."}}]}
 </script>
 
+<script src="app.js?v=20261122" defer></script>
 </body>
 </html>
