@@ -119,36 +119,41 @@ p{margin:0}
 .hero-marks li{display:flex;align-items:center;gap:8px;font-size:.9rem;font-weight:500;color:var(--ink-2)}
 .hero-marks .icon{color:var(--brass)}
 
-/* ─ Промо-ролик первого экрана ──────────────────────────── */
+/* ─ Промо-ролик первого экрана: фотокадры ──────────────── */
 .reel{
   position:relative;margin:0;align-self:stretch;
-  display:grid;grid-template-rows:1fr auto;
-  min-height:452px;overflow:hidden;border-radius:3px;
-  background:linear-gradient(168deg,var(--card),#e9ede6);
-  box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 26px 54px -28px rgba(18,42,32,.46);
+  min-height:520px;overflow:hidden;border-radius:4px;isolation:isolate;
+  background:#14231e;
+  box-shadow:0 30px 60px -30px rgba(12,30,23,.6),0 0 0 1px rgba(21,33,29,.08);
 }
-.reel-stage{position:relative;display:grid}
-.act{grid-area:1/1;display:grid;grid-template-rows:1fr auto;align-items:center;padding:26px 28px 24px;opacity:0}
+.reel-stage{position:absolute;inset:0;display:grid}
+.act{grid-area:1/1;position:relative;overflow:hidden;opacity:0}
 .act:last-child{opacity:1}
-.act-svg{width:100%;max-width:392px;height:auto;margin-inline:auto}
-.act-svg .ln{fill:none;stroke:var(--line-2);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.ghosts line{transform-box:view-box;transform-origin:150px 104px}
-.ghosts line{stroke:var(--ink-2);stroke-dasharray:3 5;opacity:.55}
-.ghosts .g1{stroke:var(--brass);stroke-dasharray:none;opacity:1}
-.ghosts .g2{transform:rotate(38deg)}
-.ghosts .g3{transform:rotate(-31deg)}
-.act-svg .doc,.act-svg .firm{stroke:var(--green)}
-.act-svg .seal{stroke:var(--brass)}
-.act-svg .hit{stroke:var(--brass);stroke-width:1.6}
-.act-svg .lens{stroke:var(--brass)}
-.act-svg .mark{fill:rgba(192,132,69,.16)}
-.act-svg .t-big{font:600 40px Onest,system-ui,sans-serif;fill:var(--brass);text-anchor:middle}
-.act-svg .t-time{font:700 26px Onest,system-ui,sans-serif;fill:var(--ink);text-anchor:middle;letter-spacing:-.03em}
-.act-svg .t-small{font:500 10px 'Golos Text',system-ui,sans-serif;fill:#6b7c72;letter-spacing:.11em;text-transform:uppercase}
-.act-line{margin-top:22px;font-size:.95rem;line-height:1.55;color:var(--ink-2);text-align:center;max-width:46ch;margin-inline:auto}
-.act-line b{display:block;margin-bottom:5px;font-family:Onest,system-ui,sans-serif;font-size:1.16rem;font-weight:600;letter-spacing:-.028em;color:var(--ink)}
-.reel-bar{height:2px;background:rgba(182,192,181,.5)}
-.reel-bar span{display:block;height:100%;width:100%;background:var(--brass);transform-origin:0 50%;transform:scaleX(1)}
+.act-photo{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transform:scale(1.06);transform-origin:50% 55%;
+}
+.act-2 .act-photo{transform-origin:70% 40%}
+.act-3 .act-photo{transform-origin:65% 50%}
+.act-4 .act-photo{transform-origin:45% 55%}
+.act::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to top,rgba(10,22,17,.92) 0%,rgba(10,22,17,.62) 30%,rgba(10,22,17,.08) 58%,rgba(10,22,17,0) 72%);
+}
+.act-cap{
+  position:absolute;left:0;right:0;bottom:0;z-index:1;
+  margin:0;padding:0 clamp(22px,3vw,34px) clamp(26px,3vw,34px);
+  color:#e9efe9;font-size:.98rem;line-height:1.5;
+}
+.act-cap b{
+  display:block;max-width:22ch;margin-bottom:8px;
+  font-family:Onest,system-ui,sans-serif;font-weight:700;
+  font-size:clamp(1.38rem,2.1vw,1.72rem);line-height:1.14;letter-spacing:-.035em;color:#fff;
+  text-wrap:balance;
+}
+.act-cap span{display:block;max-width:40ch;color:#c9d6cd}
+.reel-bar{position:absolute;left:0;right:0;bottom:0;z-index:2;height:3px;background:rgba(255,255,255,.14)}
+.reel-bar span{display:block;height:100%;width:100%;background:var(--brass-l);transform-origin:0 50%;transform:scaleX(1)}
 
 /* ─ Полоса доверия ──────────────────────────────────────── */
 .proof{background:var(--card);border-bottom:1px solid var(--line)}
@@ -296,6 +301,7 @@ details[open] summary::after{transform:rotate(225deg) translateY(-2px)}
 }
 @media (max-width:760px){
   .wrap{width:calc(100% - 36px)}
+  .reel{min-height:0;aspect-ratio:4/4.7;margin-top:30px}
   .nav{display:none}
   .header-inner{min-height:0;flex-wrap:wrap;padding-top:13px}
   .nav-mobile{
@@ -351,9 +357,11 @@ details[open] summary::after{transform:rotate(225deg) translateY(-2px)}
   .act-3{animation-delay:-10s}
   .act-4{animation-delay:-5s}
   .reel-bar span{animation:reel-bar 20s linear infinite}
-  .ghosts{transform-box:view-box;transform-origin:150px 104px;animation:ghost-drift 20s ease-in-out infinite}
-  .lens{transform-box:view-box;transform-origin:212px 106px;animation:lens-sweep 20s var(--ease) -10s infinite}
-  .mark{transform-box:view-box;transform-origin:62px 119px;animation:mark-wipe 20s var(--ease) -5s infinite}
+  .act-photo{animation:reel-kb 20s cubic-bezier(.3,.1,.3,1) infinite}
+  .act-cap{animation:reel-cap 20s var(--ease) infinite}
+  .act-2 .act-photo,.act-2 .act-cap{animation-delay:-15s}
+  .act-3 .act-photo,.act-3 .act-cap{animation-delay:-10s}
+  .act-4 .act-photo,.act-4 .act-cap{animation-delay:-5s}
 
   /* 2. Путь поиска: линия между шагами прочерчивается,
         узлы включаются по мере прокрутки секции. */
@@ -378,22 +386,17 @@ details[open] summary::after{transform:rotate(225deg) translateY(-2px)}
   25%{opacity:0;transform:translateY(-10px);filter:blur(3px)}
   100%{opacity:0}
 }
+@keyframes reel-kb{
+  0%{transform:scale(1.04)}
+  26%{transform:scale(1.15)}
+  100%{transform:scale(1.15)}
+}
+@keyframes reel-cap{
+  0%,2%{opacity:0;transform:translateY(14px)}
+  7%,21%{opacity:1;transform:none}
+  24%,100%{opacity:0;transform:translateY(-6px)}
+}
 @keyframes reel-bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-@keyframes ghost-drift{
-  0%,25%{transform:rotate(-7deg)}
-  12%{transform:rotate(9deg)}
-  26%,100%{transform:rotate(0deg)}
-}
-@keyframes lens-sweep{
-  0%,2%{transform:translate(-52px,16px)}
-  18%,25%{transform:translate(0,0)}
-  26%,100%{transform:translate(0,0)}
-}
-@keyframes mark-wipe{
-  0%,2%{transform:scaleX(0);opacity:0}
-  10%,25%{transform:scaleX(1);opacity:1}
-  26%,100%{transform:scaleX(1);opacity:1}
-}
 @keyframes arrive{
   from{opacity:0;transform:translateY(14px);filter:blur(5px)}
   to{opacity:1;transform:none;filter:blur(0)}
