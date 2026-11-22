@@ -21,7 +21,7 @@
     no_time:    { text: 'Ответ получен: времени в документе нет', tone: 'warn' },
     redirected: { text: 'Переадресовали к другому хранителю', tone: 'warn' },
     refused:    { text: 'Отказ — разбираем причину', tone: 'bad' },
-    overdue:    { text: 'Срок нарушен — готовим жалобу', tone: 'bad' }
+    overdue:    { text: 'Срок прошёл — выясняем причину', tone: 'bad' }
   };
 
   function el(tag, cls, text) {
@@ -88,7 +88,7 @@
     }
     row('Отправлен', fmt(req.sent));
     if (req.sent) row('Зарегистрирован', req.registered ? fmt(req.registered) + (req.number ? ', вх. № ' + req.number : '') : 'ждём подтверждения');
-    row(closed ? 'Ответ' : 'Срок по закону', closed ? fmt(req.reply) + ' — за ' + passed + ' дн.' : (start ? 'день ' + passed + ' из ' + limit : limit + ' дней'));
+    row(closed ? 'Ответ' : 'Ожидаемый срок', closed ? fmt(req.reply) + ' — за ' + passed + ' дн.' : (start ? 'день ' + passed + ' из ' + limit : limit + ' дней'));
     card.appendChild(meta);
 
     if (req.result) card.appendChild(el('p', 'st-req-result', req.result));
@@ -151,7 +151,7 @@
       root.appendChild(feed);
     }
 
-    root.appendChild(el('p', 'note st-fine', 'Скорость ответа зависит от учреждений; по закону у них до 30 дней. Мы пишем тебе на каждом шаге и раз в неделю, даже если новостей нет. Найти документ мы не гарантируем.'));
+    root.appendChild(el('p', 'note st-fine', 'Скорость ответа зависит от учреждений; ожидаемый срок указан у каждого запроса. Мы пишем тебе на каждом шаге и раз в неделю, даже если новостей нет. Найти документ мы не гарантируем.'));
   }
 
   function fail(root, text) {
