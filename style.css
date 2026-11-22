@@ -155,7 +155,7 @@ p{margin:0}
 .act-end{display:grid;place-items:center;background:radial-gradient(120% 90% at 30% 20%,#24493d 0%,#14231e 70%)}
 .act-end::after{display:none}
 .act-end-inner{display:grid;gap:14px;justify-items:start;max-width:30ch;padding:clamp(26px,4vw,40px);color:#e9efe9}
-.act-end-kicker{font-size:.86rem;font-weight:500;color:var(--brass-l)}
+.act-end-kicker{font-size:.86rem;font-weight:500;color:#e2b27a}
 .act-end-title{font-family:Onest,system-ui,sans-serif;font-weight:700;font-size:clamp(1.7rem,2.6vw,2.2rem);line-height:1.08;letter-spacing:-.04em;color:#fff;text-wrap:balance}
 .act-end-text{color:#c9d6cd;line-height:1.5}
 .act-end .button{margin-top:6px}
@@ -402,7 +402,6 @@ details[open] summary::after{transform:rotate(225deg) translateY(-2px)}
   .reel-chips li:nth-child(1){animation-delay:-11.4s}
   .reel-chips li:nth-child(2){animation-delay:-10.85s}
   .reel-chips li:nth-child(3){animation-delay:-10.3s}
-  .rc-dot{animation:reel-dot 1.4s ease-in-out infinite}
   .reel-time{animation:reel-stamp 28s var(--ease) -7.3s infinite}
   .rt-ring{animation:reel-ring 28s ease-out -7s infinite}
   .act-end .button{animation:reel-pulse 2.4s ease-in-out infinite}
