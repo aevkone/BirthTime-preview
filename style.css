@@ -754,3 +754,8 @@ details[open] summary::after{transform:rotate(225deg) translateY(-2px)}
   .ord-nav .button{width:100%}
   .legal-nav{display:none}
 }
+
+/* Направления поиска до оплаты: учреждения скрыты */
+.cr-locked .cr-holder-text{flex:1}
+.cr-lock-bar{display:block;height:9px;margin-top:6px;border-radius:99px;background:linear-gradient(90deg,rgba(27,77,62,.16),rgba(27,77,62,.07));filter:blur(1.5px)}
+.cr-lock-note{font-size:.9rem;color:var(--ink-2);padding:12px 14px;border:1px dashed var(--line-2);border-radius:3px}

@@ -8,23 +8,16 @@
   var RETENTION_YEARS = 25;     // норматив хранения документов роддома
   var FORM_WITH_HOUR = 1984;    // форма 103/у-84 со строкой «час»
 
+  // Только число и статусы направлений. Названия учреждений — результат маршрута,
+  // клиент получает их после оплаты, поэтому здесь их нет.
   // status: 'ok' — путь проверен, 'check' — нужно проверить запросом
-  function holders(city, year) {
-    var list = [];
-    if (city === 'Москва') {
-      list.push({ name: 'ГБУ «Мосархив»', doc: 'Детская карта из поликлиники — в ней часто есть выписка из роддома', status: 'ok' });
-    } else {
-      list.push({ name: 'Детская поликлиника или её архив', doc: 'Детская карта — в ней часто есть выписка из роддома', status: 'check' });
-    }
-    if (year >= FORM_WITH_HOUR) {
-      list.push({ name: 'ЗАГС', doc: 'Медицинское свидетельство о рождении — в нём была строка «час»', status: 'check' });
-    }
-    if (city === 'Ижевск' && year <= 2019) {
-      list.push({ name: 'Первая РКБ', doc: 'Документы бывшего роддома № 3, если ты родился там', status: 'check' });
-      list.push({ name: 'Правопреемники заводских медсанчастей', doc: 'Часть родов в Ижевске шла в роддомах при МСЧ', status: 'check' });
-    }
-    list.push({ name: 'Роддом или его правопреемник', doc: 'Запись о новорождённом и журнал родов', status: CURRENT_YEAR - year <= RETENTION_YEARS ? 'ok' : 'check' });
-    list.push({ name: 'Роддом — по запросу мамы', doc: 'История родов — её документ, запрос подаёт она', status: CURRENT_YEAR - year <= RETENTION_YEARS ? 'ok' : 'check' });
+  function directions(city, year) {
+    var fresh = CURRENT_YEAR - year <= RETENTION_YEARS ? 'ok' : 'check';
+    var list = [city === 'Москва' ? 'ok' : 'check'];
+    if (year >= FORM_WITH_HOUR) list.push('check');
+    if (city === 'Ижевск' && year <= 2019) { list.push('check'); list.push('check'); }
+    list.push(fresh);
+    list.push(fresh);
     return list;
   }
 
@@ -33,15 +26,15 @@
     var level;
     if (CURRENT_YEAR - year <= RETENTION_YEARS) {
       level = 'high';
-      reasons.push('Нормативный срок хранения документов роддома — 25 лет — ещё не прошёл.');
+      reasons.push('Нормативный срок хранения документов о родах ещё не прошёл.');
     } else if (year >= FORM_WITH_HOUR) {
       level = 'mid';
-      reasons.push('Нормативный срок хранения документов роддома прошёл, поэтому их сохранность нужно проверять. В медицинском свидетельстве образца 1984 года есть строка «час», и оно уходило в ЗАГС.');
+      reasons.push('Нормативный срок хранения прошёл, но в те годы время рождения записывали сразу в несколько документов — часть из них хранится дольше.');
     } else {
       level = 'low';
-      reasons.push('Нормативный срок хранения документов роддома давно прошёл, сохранность нужно проверять. Была ли строка времени в свидетельствах до 1984 года, ещё не проверено.');
+      reasons.push('Документы тех лет сохранились не везде, поэтому проверять придётся несколько мест.');
     }
-    if (city === 'Москва') reasons.push('В Москве детские карты поликлиник собраны в одном месте — в Мосархиве.');
+    if (city === 'Москва') reasons.push('Для Москвы один из путей хранения нужных документов мы уже проверили.');
     reasons.push('Семейные документы — обменная карта, выписка, бирка — стоит проверить в первую очередь.');
     return { level: level, reasons: reasons };
   }
@@ -68,18 +61,25 @@
     c.reasons.forEach(function (r) { why.appendChild(el('li', '', r)); });
     box.appendChild(why);
 
-    box.appendChild(el('p', 'cr-sub', 'Куда отправим запросы — одновременно:'));
-    var list = el('ul', 'cr-holders');
-    holders(city, year).forEach(function (h) {
+    var d = directions(city, year);
+    var ok = d.filter(function (x) { return x === 'ok'; }).length;
+    box.appendChild(el('p', 'cr-sub', 'Нашли ' + d.length + ' ' + (d.length < 5 ? 'направления' : 'направлений') + ' поиска' +
+      (ok ? ', из них с проверенным путём — ' + ok : '') + '. Запросы уйдут во все сразу.'));
+    var list = el('ul', 'cr-holders cr-locked');
+    d.forEach(function (status, i) {
       var li = el('li', 'cr-holder');
       var txt = el('span', 'cr-holder-text');
-      txt.appendChild(el('b', '', h.name));
-      txt.appendChild(el('span', '', h.doc));
+      txt.appendChild(el('b', '', 'Учреждение ' + (i + 1)));
+      var bar = el('span', 'cr-lock-bar');
+      bar.style.width = (52 + (i * 17) % 40) + '%';
+      bar.setAttribute('aria-hidden', 'true');
+      txt.appendChild(bar);
       li.appendChild(txt);
-      li.appendChild(el('span', 'cr-tag cr-tag-' + h.status, h.status === 'ok' ? 'путь проверен' : 'проверим запросом'));
+      li.appendChild(el('span', 'cr-tag cr-tag-' + status, status === 'ok' ? 'путь проверен' : 'проверим запросом'));
       list.appendChild(li);
     });
     box.appendChild(list);
+    box.appendChild(el('p', 'cr-lock-note', 'Названия, адреса и готовые запросы откроются в твоём маршруте после оплаты: найти, кто хранит запись сейчас, — и есть наша работа.'));
 
     var note = city === 'Другой'
       ? 'Сопровождение пока работает в Москве и Ижевске. Маршрут для другого города можно получить уже сейчас.'

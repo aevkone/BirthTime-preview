@@ -14,6 +14,7 @@
 
   var STATUS = {
     prepared:   { text: 'Подготовлен — уйдёт после оплаты', tone: 'idle' },
+    routing:    { text: 'Готовим маршрут — до 48 часов', tone: 'idle' },
     sent:       { text: 'Отправлен', tone: 'sent' },
     registered: { text: 'Зарегистрирован', tone: 'sent' },
     in_work:    { text: 'В работе', tone: 'work' },
@@ -105,6 +106,7 @@
     head.appendChild(el('h1', '', 'Поиск № ' + data.case));
     head.appendChild(el('p', 'st-sub', data.label + (data.plan ? ' · тариф «' + data.plan + '»' : '')));
     root.appendChild(head);
+    if (data.note) root.appendChild(el('p', 'cr-lock-note', data.note));
 
     var stageIndex = Math.max(0, STAGES.map(function (s) { return s.id; }).indexOf(data.stage));
     var stages = el('ol', 'st-stages');
@@ -136,6 +138,9 @@
     var grid = el('section', 'st-reqs');
     grid.appendChild(el('h2', '', 'Куда ушли запросы'));
     reqs.forEach(function (req) { grid.appendChild(requestCard(req, asOf)); });
+    if (!reqs.length && data.directions) {
+      grid.appendChild(el('p', 'cr-lock-note', 'Направлений поиска: ' + data.directions + '. Названия учреждений и запросы откроются здесь после оплаты — маршрут готовим за 48 часов.'));
+    }
     root.appendChild(grid);
 
     if (data.events && data.events.length) {

@@ -1,0 +1,79 @@
+[
+ {
+  "order": 0,
+  "city": "Москва",
+  "birth_years": {
+   "from": null,
+   "to": null
+  },
+  "self_only": false,
+  "evidence_status": "проверено",
+  "expected_reply_days": 30
+ },
+ {
+  "order": 1,
+  "city": "Ижевск",
+  "birth_years": {
+   "from": 1984,
+   "to": null
+  },
+  "self_only": false,
+  "evidence_status": "гипотеза",
+  "expected_reply_days": 30
+ },
+ {
+  "order": 2,
+  "city": "Москва",
+  "birth_years": {
+   "from": 1984,
+   "to": null
+  },
+  "self_only": false,
+  "evidence_status": "гипотеза",
+  "expected_reply_days": 30
+ },
+ {
+  "order": 3,
+  "city": "*",
+  "birth_years": {
+   "from": null,
+   "to": null
+  },
+  "self_only": false,
+  "evidence_status": "проверено",
+  "expected_reply_days": 30
+ },
+ {
+  "order": 4,
+  "city": "Ижевск",
+  "birth_years": {
+   "from": null,
+   "to": 2019
+  },
+  "self_only": false,
+  "evidence_status": "гипотеза",
+  "expected_reply_days": 30
+ },
+ {
+  "order": 5,
+  "city": "Ижевск",
+  "birth_years": {
+   "from": null,
+   "to": null
+  },
+  "self_only": false,
+  "evidence_status": "гипотеза",
+  "expected_reply_days": 30
+ },
+ {
+  "order": 6,
+  "city": "*",
+  "birth_years": {
+   "from": null,
+   "to": null
+  },
+  "self_only": true,
+  "evidence_status": "проверено",
+  "expected_reply_days": 30
+ }
+]

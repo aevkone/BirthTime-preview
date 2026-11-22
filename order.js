@@ -1,6 +1,7 @@
 /* Оформление поиска BirthTime.
-   Документы формируются из тех же шаблонов, что использует сервер
-   (data/templates.json, data/holders.json), поэтому превью совпадает с отправкой.
+   До оплаты клиент видит только число направлений поиска и доверенность:
+   какие учреждения получат запросы — результат маршрута, он открывается после оплаты.
+   data/directions.json не содержит названий и адресов (registry/export_public.py).
    В демо-режиме данные не покидают браузер. */
 (function () {
   'use strict';
@@ -9,9 +10,8 @@
   var LIVE = CFG.mode === 'live' && !!CFG.apiBase;
   var PRICES = { route: 4900, support: 7900, full: 11900 };
   var TITLES = { route: 'Маршрут за 48 часов', support: 'Сопровождение до ответа', full: 'Под ключ' };
-  var PRIORITY = { child_card: 0, zags_basis: 1, facility_record: 2, facility_successor: 3, enterprise_medical_unit: 4, mother_record: 5 };
 
-  var state = { step: 1, holders: [], templates: null, created: null };
+  var state = { step: 1, directions: [], poa: null, created: null };
   var form = document.getElementById('ord-form');
   var $ = function (id) { return document.getElementById(id); };
 
@@ -52,63 +52,30 @@
     return o;
   }
 
-  // ── план: те же правила, что registry/holders.py ─────────
+  // ── направления: те же правила отбора, что registry/holders.py, без названий ──
   function plan(o) {
     var year = parseInt(o.applicant.birth_date.slice(0, 4), 10);
     var q = norm(o.applicant.birth_city || '');
-    return state.holders.filter(function (h) {
+    return state.directions.filter(function (h) {
       if (h.city !== '*' && norm(h.city) !== q) return false;
       if (h.birth_years.from !== null && year < h.birth_years.from) return false;
       if (h.birth_years.to !== null && year > h.birth_years.to) return false;
       return true;
-    }).sort(function (a, b) { return (PRIORITY[a.holder_type] - PRIORITY[b.holder_type]) || (a.id < b.id ? -1 : 1); })
-      .map(function (h) {
-        return { holder_id: h.id, holder: h.name, holder_type: h.holder_type, document: h.document, email: h.email || null,
-                 evidence_status: h.evidence_status, expected_days: h.expected_reply_days, only_self: h.holder_type === 'mother_record' };
-      });
+    }).sort(function (a, b) { return a.order - b.order; });
   }
 
-  // ── документы: те же формулировки, что server/documents.py ──
   function fill(text, v) { return text.replace(/\{\{(\w+)\}\}/g, function (_, k) { return v[k] || ''; }); }
-  function phrases(o) {
-    var m = o.memory, poly;
-    if (m.polyclinic) poly = ', в детской поликлинике ' + m.polyclinic + '.';
-    else if (m.family_address) poly = ' Номер детской поликлиники неизвестен; в первые годы семья жила по адресу: ' + m.family_address + '. Прошу провести поиск по фамилии, имени, отчеству и дате рождения.';
-    else poly = ' Номер детской поликлиники неизвестен; прошу провести поиск по фамилии, имени, отчеству и дате рождения.';
-    return {
-      hospital_phrase: m.hospital ? ' в учреждении: ' + m.hospital : ', наименование родильного дома неизвестно',
-      polyclinic_phrase: poly,
-      mother_phrase: m.mother_fio ? ' Мать: ' + m.mother_fio + '.' : '',
-      registry_phrase: m.registry_office ? ' (' + m.registry_office + ')' : ''
-    };
-  }
-  function letter(o, step) {
-    var T = state.templates, spec = T.letters[step.holder_type], a = o.applicant, rep = T.representative;
-    var proxy = o.mode === 'proxy' && !step.only_self;
-    var v = { applicant_fio: a.fio, birth_date: ruDate(a.birth_date), birth_city: a.birth_city,
-              subject: proxy ? 'доверителя — ' + a.fio : 'меня, ' + a.fio,
-              subject_gen: proxy ? 'доверителя — ' + a.fio : 'моё',
-              subject_cap: proxy ? 'Доверитель, ' + a.fio + ',' : 'Я' };
-    var ph = phrases(o); for (var k in ph) v[k] = ph[k];
-    var today = new Date().toISOString().slice(0, 10);
-    return {
-      to: step.holder, title: spec.title, only_self: step.only_self, email: step.email,
-      sender: proxy ? 'от ' + a.fio + ', ' + v.birth_date + ' г. р., в лице представителя — ' + rep.name + ' (ИНН ' + rep.inn + '), действующего по доверенности в электронной форме от ' + ruDate(today)
-                    : (step.only_self ? 'от матери — [ФИО мамы]' : 'от ' + a.fio + ', ' + v.birth_date + ' г. р.'),
-      body: spec.body.map(function (line) { return fill(line, v); }),
-      basis: 'Основание: ' + T.legal_basis,
-      reply: proxy ? 'Ответ прошу направить представителю: ' + rep.reply_email + '.' : 'Ответ прошу направить: ' + (step.only_self ? '[адрес мамы]' : a.email) + '.'
-    };
-  }
+
   function poa(o) {
-    var T = state.templates, spec = T.power_of_attorney, a = o.applicant, p = o.proxy, rep = T.representative;
-    var v = { place: a.birth_city, date: ruDate(new Date().toISOString().slice(0, 10)), applicant_fio: a.fio, birth_date: ruDate(a.birth_date),
-              passport: p.passport.series + ' ' + p.passport.number + ', выдан ' + p.passport.issued_by + ' ' + p.passport.issued_date,
-              reg_address: p.reg_address, rep_name: rep.name, rep_inn: rep.inn, rep_ogrnip: rep.ogrnip };
+    var spec = state.poa.power_of_attorney, a = o.applicant, rep = state.poa.representative, p = (o.proxy && o.proxy.passport) || {};
+    var v = { place: a.birth_city, date: ruDate(new Date().toISOString().slice(0, 10)), applicant_fio: a.fio, birth_date: a.birth_date ? ruDate(a.birth_date) : '',
+              passport: (p.series + ' ' + p.number + ', выдан ' + p.issued_by + ' ' + p.issued_date).trim(), reg_address: (o.proxy || {}).reg_address || '',
+              rep_name: rep.name, rep_inn: rep.inn, rep_ogrnip: rep.ogrnip };
     return { title: spec.title, body: spec.body.map(function (l) { return fill(l, v); }), warning: spec.warning };
   }
 
-  // ── проверка шагов ─────────────────────────────────────────
+  function plural(n) { return n % 10 === 1 && n % 100 !== 11 ? 'направление' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'направления' : 'направлений'); }
+
   function errorsFor(step, o) {
     var e = [];
     if (step === 1) {
@@ -153,16 +120,21 @@
     box.textContent = '';
     if (!o.applicant.birth_date) return;
     var p = plan(o);
-    box.appendChild(el('h3', '', 'План поиска: ' + p.length + ' ' + (p.length === 1 ? 'адресат' : (p.length < 5 ? 'адресата' : 'адресатов'))));
-    var ul = el('ul', 'ord-plan-list');
-    p.forEach(function (s) {
-      var li = el('li');
-      li.appendChild(el('b', '', s.holder));
-      li.appendChild(el('span', '', s.only_self ? 'Отправляет мама — подготовим письмо для неё' : s.document));
-      li.appendChild(el('em', 'cr-tag ' + (s.evidence_status === 'проверено' ? 'cr-tag-ok' : 'cr-tag-check'), s.evidence_status === 'проверено' ? 'путь проверен' : 'проверим запросом'));
+    var ok = p.filter(function (s) { return s.evidence_status === 'проверено'; }).length;
+    box.appendChild(el('h3', '', 'Нашли ' + p.length + ' ' + plural(p.length) + ' поиска' + (ok ? ' · с проверенным путём — ' + ok : '')));
+    var ul = el('ul', 'cr-holders cr-locked');
+    p.forEach(function (s, i) {
+      var li = el('li', 'cr-holder');
+      var txt = el('span', 'cr-holder-text');
+      txt.appendChild(el('b', '', s.self_only ? 'Запрос от мамы' : 'Учреждение ' + (i + 1)));
+      var bar = el('span', 'cr-lock-bar'); bar.style.width = (52 + (i * 17) % 40) + '%'; bar.setAttribute('aria-hidden', 'true');
+      txt.appendChild(bar);
+      li.appendChild(txt);
+      li.appendChild(el('span', 'cr-tag ' + (s.evidence_status === 'проверено' ? 'cr-tag-ok' : 'cr-tag-check'), s.evidence_status === 'проверено' ? 'путь проверен' : 'проверим запросом'));
       ul.appendChild(li);
     });
     box.appendChild(ul);
+    box.appendChild(el('p', 'cr-lock-note', 'Названия учреждений, адреса и готовые запросы — это твой маршрут. Он откроется в трекере после оплаты, в течение 48 часов. Чем больше ты вспомнишь выше, тем точнее он будет.'));
   }
 
   function docBlock(title, lines, note) {
@@ -182,12 +154,11 @@
       var x = poa(o);
       box.appendChild(docBlock('Доверенность в электронной форме', x.body, x.warning));
     }
-    plan(o).forEach(function (s) {
-      var L = letter(o, s);
-      var who = L.only_self ? ' — отправляет мама' : (o.mode === 'self' ? ' — отправляешь ты' : (L.email ? ' — отправим на ' + L.email : ' — отправим почтой'));
-      box.appendChild(docBlock(L.to + who, [L.sender, L.title].concat(L.body, [L.basis, L.reply])));
-    });
-    box.appendChild(el('p', 'note', 'Пометки в квадратных скобках заполняются после проверки юриста — с ними письма не уходят.'));
+    box.appendChild(docBlock('Запросы в учреждения — после оплаты', [
+      'Список учреждений и тексты запросов мы составим в течение 48 часов после оплаты: проверим, кто хранит записи твоего года рождения сейчас, и подставим всё, что ты вспомнил.',
+      o.mode === 'proxy' ? 'Каждый запрос появится в трекере до отправки — ты увидишь, куда и что уходит от твоего имени.'
+                         : 'Готовые запросы с адресами придут тебе на почту и появятся в трекере — останется отправить их.'
+    ]));
   }
 
   function renderSummary() {
@@ -196,7 +167,7 @@
     var dl = el('dl', 'ord-sum');
     [['Тариф', TITLES[o.tariff] + ' — ' + PRICES[o.tariff].toLocaleString('ru-RU') + ' ₽'],
      ['Запросы отправляет', o.mode === 'proxy' ? 'BirthTime по электронной доверенности' : 'ты сам'],
-     ['Адресатов', String(plan(o).length)],
+     ['Направлений поиска', String(plan(o).length) + ' — учреждения откроются после оплаты'],
      ['Результат и статусы', 'на ' + o.applicant.email]].forEach(function (r) {
       var w = el('div'); w.appendChild(el('dt', '', r[0])); w.appendChild(el('dd', '', r[1])); dl.appendChild(w);
     });
@@ -283,9 +254,9 @@
     return {
       case: 'DEMO', example: true, label: o.applicant.birth_city + ' · рождение в ' + o.applicant.birth_date.slice(0, 4) + ' году',
       plan: TITLES[o.tariff], as_of: today, stage: 'route', next_update: '',
-      requests: p.map(function (s) {
-        return { holder: s.holder, document: s.document, channel: s.email ? 'Электронная почта' : 'Почта или канал учреждения',
-                 status: (s.only_self || o.mode === 'self') ? 'self_send' : 'prepared', deadline_days: s.expected_days };
+      requests: p.map(function (s, i) {
+        return { holder: s.self_only ? 'Запрос от мамы' : 'Учреждение ' + (i + 1) + ' — уточняем в маршруте', document: 'Название, адрес и текст запроса появятся, когда маршрут будет готов',
+                 channel: '—', status: 'routing', deadline_days: s.expected_reply_days };
       }),
       events: [{ date: today, text: 'Заявка оформлена (демо). Маршрут готовится — до 48 часов после оплаты.' }]
     };
@@ -328,7 +299,7 @@
     if (r) { r.checked = true; form.querySelectorAll('input[name="tariff"]').forEach(function (x) { x.closest('.ord-card').classList.toggle('is-picked', x.checked); }); }
   }
   $('f-date').max = new Date().toISOString().slice(0, 10);
-  Promise.all([fetch('data/holders.json').then(function (r) { return r.json(); }), fetch('data/templates.json').then(function (r) { return r.json(); })])
-    .then(function (res) { state.holders = res[0]; state.templates = res[1]; })
+  Promise.all([fetch('data/directions.json').then(function (r) { return r.json(); }), fetch('data/poa.json').then(function (r) { return r.json(); })])
+    .then(function (res) { state.directions = res[0]; state.poa = res[1]; })
     .catch(function () { showErrors([[null, 'Не удалось загрузить справочники. Обнови страницу.']]); });
 })();
